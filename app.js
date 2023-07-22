@@ -26,9 +26,19 @@ const server = http.createServer((req, res) => {
                 res.end();
             }
         })
+    } else {
+        fs.readFile("./error.html", (err, data) => {
+            if (err) {
+                console.log("Sahifani yuklashda xatolik!");
+                res.statusCode = 404;
+                res.end("Sahifani yuklashda xatolik!");
+            } else {
+                res.write(data);
+                res.end();
+            }
+        });
     }
 });
-
 const PORT = process.env.PORT || 3030;
 const HOST = process.env.HOST || "localhost";
 console.log(HOST);
