@@ -64,7 +64,7 @@ let filePath = "";
     //     res.end();
     // });
 
-    fs.access(filePath, fs.constants.R_OK, (err) => {
+    fs.access(filePath, fs.constants.R_OK, (err) => {  // secont method
         if (err) {
             res.statusCode = 500;
             res.end("Resource not found!")
@@ -72,6 +72,7 @@ let filePath = "";
             fs.createReadStream(filePath).pipe(res);
         }
     });
+    
 });
 const PORT = process.env.PORT || 3030;
 const HOST = process.env.HOST || "localhost";
