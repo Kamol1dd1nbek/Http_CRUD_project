@@ -1,14 +1,32 @@
 const http = require("http");
 const dotenv = require('dotenv').config();
-// console.log(Object.keys(http));
-
+const fs = require('fs');
 
 const server = http.createServer((req, res) => {
-    console.log("serverga so'rov");
-    console.log(`Url: ${req.url},  Method: ${req.method}`);
     res.setHeader("Content-type", "text/html");
-    res.write("<h1>Serverdan javob</h1>");
-    res.end();
+    if (req.url == "/") {
+        fs.readFile("./index.html", (err, data) => {
+            if (err) {
+                console.log("Sahifani yuklashda xatolik!");
+                res.statusCode = 404;
+                res.end("Sahifani yuklashda xatolik!");
+            } else {
+                res.write(data);
+                res.end();
+            }
+        })
+    } else if (req.url == "/users") {
+        fs.readFile("./users.html", (err, data) => {
+            if (err) {
+                console.log("Sahifani yuklashda xatolik!");
+                res.statusCode = 404;
+                res.end("Sahifani yuklashda xatolik!");
+            } else {
+                res.write(data);
+                res.end();
+            }
+        })
+    }
 });
 
 const PORT = process.env.PORT || 3030;
