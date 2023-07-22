@@ -4,8 +4,7 @@ const fs = require('fs');
 const path = require('path');
 
 const server = http.createServer((req, res) => {
-    const createViewpath = (page) => 
-        path.resolve(__dirname, "views", `${page}.html`);
+    const createViewpath = (page) => path.resolve(__dirname, "views", `${page}.html`);
 let filePath = "";
     res.setHeader("Content-type", "text/html");
 
@@ -55,12 +54,27 @@ let filePath = "";
             filePath = createViewpath("error");
             res.statusCode = 404;
     }
+    // fs.readFile(filePath, (err, data) => {  // first method
+    //     if (err) {
+    //         console.log(`Sahifani yuklashda xatolik!`);
+    //         res.statusCode = 500;
+    //     } else {
+    //         res.write(data);
+    //     }
+    //     res.end();
+    // });
 
-    console.log(filePath);
+    fs.access(filePath, fs.constants.R_OK, (err) => {
+        if (err) {
+            res.statusCode = 500;
+            res.end("Resource not found!")
+        } else {
+            fs.createReadStream(filePath).pipe(res);
+        }
+    });
 });
 const PORT = process.env.PORT || 3030;
 const HOST = process.env.HOST || "localhost";
-console.log(HOST);
 server.listen(PORT, HOST, (error) => {
     error ? console.log(error) : console.log(`Server is running on port: ${PORT}`);
 });
